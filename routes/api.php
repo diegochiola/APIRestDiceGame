@@ -2,6 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GameController;
+use App\Http\Controllers\PassportController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,17 +22,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-/*
-Las traigo de mi version anterior
 
 //Rutas accesibles sin registro:
-Route::post('/players', [PassportController::class,'register']); //registrarse
-Route::post('/login', [PassportController::class,'login']); //iniciar sesión
+Route::post('/players', [UserController::class,'register']); //registrarse
+Route::post('/login', [UserController::class,'login']); //iniciar sesión
 
 //Rutas accesibles con registro
 Route::middleware('auth:api')->group(function () {
     Route::put('/players/{id}', [UserController::class, 'updateName']); //modificar usuario
-    Route::post('/logout', [PassportController::class, 'logout']); //cerrar sesión 
+    Route::post('/logout', [UserController::class, 'logout']); //cerrar sesión 
 });
 
 // Rutas para jugadores
@@ -45,4 +47,4 @@ Route::middleware(['auth:api', 'role:admin'])->group(function () {
     Route::get('/players/ranking/winner', [GameController::class, 'winner']); //Ganadores
     Route::get('/players/ranking/loser', [GameController::class, 'loser']); //perdedores
 });
-*/
+
