@@ -5,6 +5,8 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Models\User;
+use Spatie\Permission\Models\Role;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -25,6 +27,8 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            //olvide el nickname
+            'nickname' => fake()->optional(0.5)->name() ?? 'anonimo',
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
@@ -41,4 +45,12 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+    
+    public function configure(){
+        return $this->afterCreating(function (User $user) {
+            $role = Role::where('name', 'player')->first();
+            $user->assignRole($role);
+        }); 
+    }
+    
 }
