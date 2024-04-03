@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Filters\GameFilter;
 use Illuminate\Http\Request;
 use Workbench\App\Models\User;
+use App\Http\Resources\GameCollection;
 
 class GameController extends Controller
 {
