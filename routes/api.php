@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
-use App\Http\Controllers\PassportController;
 use App\Http\Controllers\UserController;
 
 
@@ -17,14 +16,14 @@ use App\Http\Controllers\UserController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
+/*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+*/
 
 //Rutas accesibles sin registro:
-Route::post('/players', [UserController::class,'register']); //registrarse
+Route::post('/register', [UserController::class,'register']); //registrarse
 Route::post('/login', [UserController::class,'login']); //iniciar sesión
 
 //Rutas accesibles con registro

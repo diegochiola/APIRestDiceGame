@@ -7,6 +7,7 @@ use Workbench\App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,38 +15,27 @@ class UserController extends Controller
 {
     //definir funciones
 
-    public function registerUser(Request $request)
+    public function register(StoreUserRequest $request)
     { 
-        $validator = Validator::make($request->all(), [
-            'name' => 'unique:users',
-            'nickname' => 'nullable|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|alpha_num'
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-        //si son validos
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']); //cifrar la password con bcrypt
+    //validaciones realizadas por el StoreUserRequest
+        $input = $request->validated();
+        $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        //asignar el rol
+    
         $this->assignPlayerRoleToUser($user);
-         //asignar token 
+    
         $success['token'] = $user->createToken('authToken')->accessToken;
         $success['id'] = $user->id;
         $success['name'] = $user->name;
         $success['role'] = 'player';
     
-        return response()->json($user, 201);
+        return response()->json($success, 201);
     }
-
     public function createUser(Request $request)
     {
         $user = User::create([
             'name' => $request->name,
-            'nickname' => $nickname,
+            'nickname' =>$request->nickname,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -58,8 +48,12 @@ class UserController extends Controller
         $user->assignRole($role);
 
     }
-    public function update(UpdateUserRequest $request, User $user){
-        $user->update($request->all());
+    public function update(UpdateUserRequest $request, $id){
+        $userData = $request->validated();
+        $user = User::findOrFail($id);
+        $user->update($userData);
+
+        return response()->json($user, 200);
        }
     
        public function updateName(Request $request, $id)
@@ -82,9 +76,8 @@ class UserController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)){
             $user = Auth::user();
-            $success['token'] = $user->createToken('authToken')->accessToken;
-            $success['name'] = $user->name;
-            return response()->json([$success, 'You are logged in!'], 200);
+            $token = $user->createToken('authToken')->accessToken;
+            return response()->json(['token' => $token, 'message' => 'You are logged in!'], 200);
         } else {
             return response()->json(['error' => 'Login error. Email or password error.'], 401);
         }
