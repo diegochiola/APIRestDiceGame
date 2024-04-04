@@ -23,8 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 */
 
 //Rutas accesibles sin registro:
-Route::post('/register', [UserController::class,'register']); //registrarse
-Route::post('/login', [UserController::class,'login']); //iniciar sesión
+Route::post('/register', [UserController::class, 'register']); //registrarse
+Route::post('/login', [UserController::class, 'login']); //iniciar sesión
+//Route::post('/register', [UserController::class,'register']); //registrarse
+//Route::post('/login', [UserController::class,'login']); //iniciar sesión
 
 //Rutas accesibles con registro
 Route::middleware('auth:api')->group(function () {

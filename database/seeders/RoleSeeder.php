@@ -15,17 +15,20 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        
-        //definicion de roles:
+        // Verificar si el rol 'admin' ya existe
         $adminRole = Role::where('name', 'admin')->where('guard_name', 'api')->first();
         if (!$adminRole) {
+            // Crear el rol 'admin' si no existe
             Role::create(['name' => 'admin', 'guard_name' => 'api']);
         }
 
+        // Verificar si el rol 'player' ya existe
         $playerRole = Role::where('name', 'player')->where('guard_name', 'api')->first();
         if (!$playerRole) {
+            // Crear el rol 'player' si no existe
             Role::create(['name' => 'player', 'guard_name' => 'api']);
         }
+    }
         
         //$admin = Role::create(['name' => 'admin', 'guard_name' => 'api']);
         //$player = Role::create(['name' => 'player', 'guard_name' => 'api']);
@@ -47,5 +50,5 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'allUsersPercentageOfWins'])->syncRoles([$admin, $player]);
         Permission::create(['name' => 'getTotalPercentageOfWins'])->syncRoles([$admin, $player]);
         */
-    }
+    
 }

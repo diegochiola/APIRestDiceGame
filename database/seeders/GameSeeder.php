@@ -14,8 +14,8 @@ class GameSeeder extends Seeder
     public function run(): void
     {
         //Si llamo al factory es menos codigo
-        //Game::factory(10)->create();
-        Game::create([
+        Game::factory(10)->create();
+        /*Game::create([
             'dice1' => 2, 'dice2' => 6,
             'won' => false,
             'user_id' => 1, 
@@ -43,7 +43,7 @@ class GameSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        
+        */
         
     }
 }
